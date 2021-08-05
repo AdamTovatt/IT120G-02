@@ -2,6 +2,7 @@
 #include <ctime>
 #include <windows.h>
 #include <thread>
+#include "CardDeck.cpp"
 
 #pragma execution_character_set( "utf-8" )
 
@@ -9,7 +10,30 @@ using namespace std;
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	SetConsoleOutputCP(65001);
+	string s = "";
+	srand(time(0));
+
+	CardDeck deck = CardDeck();
+	Card card = deck.GetFirstCard();
+
+	cout << card.value << "\n";
+	cout << card.color << "\n";
+
+	deck.Shuffle();
+
+	Card card2 = deck.GetFirstCard();
+	cout << card2.value << "\n";
+	cout << card2.color << "\n";
+
+	if (card == card2)
+		cout << "det var samma kort";
+	else if (card > card2)
+		cout << "det första kortet var bättre";
+	else if (card < card2)
+		cout << "det andra kortet var bättre";
+	else
+		cout << "vi borde inte kunna komma hit...";
 }
 
 int TakeIntInput(string promt, int min, int max) //detta är en funktion för att ta indata från användaren som säkerställs till att vara av typen int och inte mer än max och inte mindre än min
