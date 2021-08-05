@@ -3,38 +3,14 @@
 #include <windows.h>
 #include <thread>
 #include "CardDeck.cpp"
+#include "Player.cpp"
 
 #pragma execution_character_set( "utf-8" )
 
 using namespace std;
 
-int main()
-{
-	SetConsoleOutputCP(65001);
-	string s = "";
-	srand(time(0));
-
-	CardDeck deck = CardDeck();
-	Card card = deck.GetFirstCard();
-
-	cout << card.value << "\n";
-	cout << card.color << "\n";
-
-	deck.Shuffle();
-
-	Card card2 = deck.GetFirstCard();
-	cout << card2.value << "\n";
-	cout << card2.color << "\n";
-
-	if (card == card2)
-		cout << "det var samma kort";
-	else if (card > card2)
-		cout << "det första kortet var bättre";
-	else if (card < card2)
-		cout << "det andra kortet var bättre";
-	else
-		cout << "vi borde inte kunna komma hit...";
-}
+Player playerOne;
+Player playerTwo;
 
 int TakeIntInput(string promt, int min, int max) //detta är en funktion för att ta indata från användaren som säkerställs till att vara av typen int och inte mer än max och inte mindre än min
 {
@@ -51,4 +27,87 @@ int TakeIntInput(string promt, int min, int max) //detta är en funktion för att 
 	}
 
 	return input; //returnerar det man skrivit
+}
+
+int PlayRound(CardDeck deck) 
+{
+	deck.Shuffle(); //blandar kortleken i början av varje runda innan spelarna drar sina kort
+
+	cout << playerOne.Name << ", tryck på enter för att dra ett kort\n";
+	Card card = deck.GetFirstCard();
+	cin.ignore(100, '\n');
+	cin.get();
+	cout << playerOne.Name << " drog kortet " << deck.GetNameOfCard(card);
+
+	return 1;
+}
+
+int PlayMatch(CardDeck deck)
+{
+	int playerOneRounds = 0;
+	int playerTwoRounds = 0;
+
+	while (playerOneRounds < 2 && playerTwoRounds < 2)
+	{
+		int roundResult = PlayRound(deck);
+
+		if (roundResult == 1)
+		{
+			playerOneRounds++;
+			cout << playerOne.Name << " vann denna runda";
+		}
+		else
+		{
+			playerTwoRounds++;
+			cout << playerTwo.Name << " vann denna runda";
+		}
+	}
+
+	if (playerOneRounds == 2)
+		return 1;
+	return 2;
+}
+
+int main()
+{
+	SetConsoleOutputCP(65001); //gör så att åäö kan skrivas till konsolen
+	srand(time(0)); //initialiserar random baserat på den nuvarande tiden så att det inte alltid är samma
+
+	CardDeck deck = CardDeck(); //skapar en ny kortlek som vi kan använda för kortspelet
+
+	cout << "Välkommen till kortspelet\n\n";
+	cout << "Spelare ett, skriv in ditt namn och tryck sedan på enter:\n";
+	string playerOneName;
+	cin >> playerOneName;
+	playerOne = Player(playerOneName);
+	cout << "\nSpelare två, skriv in ditt namn och tryck sedan på enter:\n";
+	string playerTwoName;
+	cin >> playerTwoName;
+	playerTwo = Player(playerTwoName);
+
+	cout << "\n" << playerOne.Name << " mot " << playerTwo.Name << "\n";
+
+	PlayMatch(deck);
+
+	Card card = deck.GetFirstCard();
+
+	cout << "värde: " << card.Value << "\n";
+	cout << "färg: " << card.Color << "\n\n";
+
+	deck.Shuffle();
+
+	Card card2 = deck.GetFirstCard();
+	cout << "värde: " << card2.Value << "\n";
+	cout << "färg: " << card2.Color << "\n\n";
+
+	if (card == card2)
+		cout << "det var samma kort";
+	else if (card > card2)
+		cout << "det första kortet var bättre";
+	else if (card < card2)
+		cout << "det andra kortet var bättre";
+	else
+		cout << "vi borde inte kunna komma hit...";
+
+	cout << "\n\n";
 }

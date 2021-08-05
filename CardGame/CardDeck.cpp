@@ -5,9 +5,11 @@ class CardDeck
 {
 private:
 	Card cards[52];
+	const string names[13] = { "ett", "två", "tre", "fyra", "fem", "sex", "sju", "åtta", "nio", "tio", "knekt", "dam", "kung" };
+	const string colors[4] = { "spader", "hjärter", "ruter", "klöver" };
 
 public:
-	CardDeck()
+	CardDeck() //skapar en ny kortlek som fylls med kort
 	{
 		for (int i = 0; i < 4; i++) //loopar igenom färger, det finns fyra stycken
 		{
@@ -18,7 +20,14 @@ public:
 		}
 	}
 
-	Card GetFirstCard()
+	Card GetFirstCard(Card ignoreCard) //tar "översta" kortet i kortleken fast tar inte med kortet man redan dragit
+	{
+		if (cards[0] == ignoreCard) //om första kortet råkar vara det vi inte ska ta med tar vi nästa kort bara vilket ger samma resultat som att faktiskt ta bort det ignorerade kortet och sen dra ett kort
+			return cards[1];
+		return cards[0];
+	}
+
+	Card GetFirstCard() //tar "översta" kortet i kortleken
 	{
 		return cards[0];
 	}
@@ -32,5 +41,10 @@ public:
 			cards[i] = cards[switchIndex];
 			cards[switchIndex] = temp;
 		}
+	}
+
+	string GetNameOfCard(Card card)
+	{
+			return colors[card.Color - 1] + " " + names[card.Value - 1];
 	}
 };

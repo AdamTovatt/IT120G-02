@@ -1,44 +1,48 @@
+#include <string>
+
+using namespace std;
+
 class Card
 {
 public:
-	int value;
-	int color;
+	int Value; //kortets valör
+	int Color; //kortets färg
 
-	Card() //default constructor för kompilatorn klagade på att det inte fanns annars
+	Card() //default konstruktor för kompilatorn klagade på att det inte fanns annars
 	{
-		value = 0;
-		color = 0;
+		Value = 0;
+		Color = 0;
 	}
 
-	Card(int newValue, int newColor)
+	Card(int newValue, int newColor) //konstruktor som tar in ett värde och en färg på ett kort som ska skapas
 	{
-		value = newValue;
-		color = newColor;
+		Value = newValue;
+		Color = newColor;
 	}
 
-	bool operator==(const Card& other)
+	bool operator==(const Card& other) //en == operator så att vi kan jämföra kort med == senare
 	{
-		return other.value == value && other.color == color;
+		return other.Value == Value && other.Color == Color;
 	}
 
-	bool operator!=(const Card& other)
+	bool operator!=(const Card& other) //en != operator så att vi kan jämföra kort med != senare
 	{
-		return !(other.value == value && other.color == color);
+		return !(other.Value == Value && other.Color == Color);
 	}
 
-	bool operator<(const Card& other)
+	bool operator<(const Card& other) //en < operator så att vi kan jämföra kort med < senare
 	{
-		int otherSum = other.value * 10 + other.color;
-		int thisSum = value * 10 + color;
+		int otherSum = other.Value * 10 + other.Color;
+		int thisSum = Value * 10 + Color;
 
-		return otherSum < thisSum;
+		return thisSum < otherSum;
 	}
 
-	bool operator>(const Card& other)
+	bool operator>(const Card& other) //en > operator så att vi kan jämföra kort med > senare
 	{
-		int otherSum = other.value * 10 + other.color;
-		int thisSum = value * 10 + color;
+		int otherSum = other.Value * 10 + other.Color;
+		int thisSum = Value * 10 + Color;
 
-		return otherSum > thisSum;
+		return thisSum > otherSum;
 	}
 };
