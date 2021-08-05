@@ -6,9 +6,9 @@
 class CardDeck
 {
 private:
-	Card cards[52];
-	const string names[13] = { "ett", "två", "tre", "fyra", "fem", "sex", "sju", "åtta", "nio", "tio", "knekt", "dam", "kung" };
-	const string colors[4] = { "spader", "hjärter", "ruter", "klöver" };
+	Card cards[52]; //array med korten i kortleken
+	const string names[13] = { "ett", "två", "tre", "fyra", "fem", "sex", "sju", "åtta", "nio", "tio", "knekt", "dam", "kung" }; //namnen på alla kortvalörer så att de kan visas för användarna sen
+	const string colors[4] = { "spader", "hjärter", "ruter", "klöver" }; //namnen på alla färger så att de kan visas för användarna sen
 
 public:
 	CardDeck() //skapar en ny kortlek som fylls med kort
@@ -36,7 +36,7 @@ public:
 
 	void Shuffle() //blandar kortleken med fisher yates metoden
 	{
-		for (int i = (sizeof(cards)/sizeof(*cards)) - 1; i > 0; --i)
+		for (int i = (sizeof(cards) / sizeof(*cards)) - 1; i > 0; --i)
 		{
 			int switchIndex = rand() % (i + 1);
 			Card temp = cards[i];
@@ -45,8 +45,8 @@ public:
 		}
 	}
 
-	string GetNameOfCard(Card card)
+	string GetNameOfCard(Card card) //funktion som ger namnet på ett kort som kan visas för användaren
 	{
-			return colors[card.Color - 1] + " " + names[card.Value - 1];
+		return colors[card.Color - 1] + " " + names[card.Value - 1];
 	}
 };
