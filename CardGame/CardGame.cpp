@@ -31,15 +31,30 @@ int TakeIntInput(string promt, int min, int max) //detta är en funktion för att 
 
 int PlayRound(CardDeck deck) 
 {
-	deck.Shuffle(); //blandar kortleken i början av varje runda innan spelarna drar sina kort
-
 	cout << playerOne.Name << ", tryck på enter för att dra ett kort\n";
-	Card card = deck.GetFirstCard();
-	cin.ignore(100, '\n');
-	cin.get();
-	cout << playerOne.Name << " drog kortet " << deck.GetNameOfCard(card);
 
-	return 1;
+	deck.Shuffle(); //blandar kortleken innan varje spelares drag
+	Card card1 = deck.GetFirstCard();
+
+	cin.ignore(100, '\n');
+	cin.get(); //väntar på att spelaren trycker på enter för att fortsätta
+
+	cout << playerOne.Name << " drog kortet " << deck.GetNameOfCard(card1) << "\n\n";
+	cout << playerTwo.Name << ", tryck på enter för att dra ett kort\n";
+
+	deck.Shuffle();
+	Card card2 = deck.GetFirstCard();
+
+	cin.get();
+
+	cout << playerTwo.Name << " drog kortet " << deck.GetNameOfCard(card2) << "\n\n";
+
+	if (card1 == card2)
+		throw new exception("något fel har lett till att spelarna fått samma kort, detta borde inte gå");
+
+	if (card1 > card2) //spelare 1s kort var mer värt än spelare 2s så vi returnerar 1
+		return 1;
+	return 2; //annars vann spelare 2
 }
 
 int PlayMatch(CardDeck deck)
@@ -54,13 +69,18 @@ int PlayMatch(CardDeck deck)
 		if (roundResult == 1)
 		{
 			playerOneRounds++;
-			cout << playerOne.Name << " vann denna runda";
+			playerOne.RoundsWon++;
+			cout << playerOne.Name << " vann denna runda\n\n";
 		}
 		else
 		{
 			playerTwoRounds++;
-			cout << playerTwo.Name << " vann denna runda";
+			playerTwo.RoundsWon++;
+			cout << playerTwo.Name << " vann denna runda\n\n";
 		}
+
+		cout << playerOne.Name << " har vunnit " << playerOneRounds << (playerOneRounds == 1 ? " runda\n" : " rundor\n");
+		cout << playerTwo.Name << " har vunnit " << playerTwoRounds << (playerTwoRounds == 1 ? " runda\n" : " rundor\n\n");
 	}
 
 	if (playerOneRounds == 2)
@@ -85,29 +105,31 @@ int main()
 	cin >> playerTwoName;
 	playerTwo = Player(playerTwoName);
 
-	cout << "\n" << playerOne.Name << " mot " << playerTwo.Name << "\n";
+	bool keepPlaying = true;
 
-	PlayMatch(deck);
+	while (keepPlaying)
+	{
+		if (PlayMatch(deck) == 1)
+		{
+			playerOne.MatchesWon++;
+			cout << playerOne.Name << " vann matchen!\n\n";
+		}
+		else
+		{
+			playerTwo.MatchesWon++;
+			cout << playerTwo.Name << " vann matchen!\n\n";
+		}
 
-	Card card = deck.GetFirstCard();
+		cout << "Total resultat i matcher:\n";
+		cout << playerOne.Name << " " << playerOne.MatchesWon;
+		cout << playerTwo.Name << " " << playerTwo.MatchesWon;
+		cout << "\nTotalt resultat i rundor:\n";
+		cout << playerOne.Name << " " << playerOne.RoundsWon;
+		cout << playerTwo.Name << " " << playerTwo.RoundsWon;
 
-	cout << "värde: " << card.Value << "\n";
-	cout << "färg: " << card.Color << "\n\n";
-
-	deck.Shuffle();
-
-	Card card2 = deck.GetFirstCard();
-	cout << "värde: " << card2.Value << "\n";
-	cout << "färg: " << card2.Color << "\n\n";
-
-	if (card == card2)
-		cout << "det var samma kort";
-	else if (card > card2)
-		cout << "det första kortet var bättre";
-	else if (card < card2)
-		cout << "det andra kortet var bättre";
-	else
-		cout << "vi borde inte kunna komma hit...";
+		if (TakeIntInput("\n\nVill ni fortsätta spela?\n1. Ja\n2. Nej, avsluta", 1, 2) == 2)
+			keepPlaying = false;
+	}
 
 	cout << "\n\n";
 }

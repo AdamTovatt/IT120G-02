@@ -1,6 +1,8 @@
 #include "Card.cpp"
 #include <stdlib.h>
 
+#pragma execution_character_set( "utf-8" )
+
 class CardDeck
 {
 private:
